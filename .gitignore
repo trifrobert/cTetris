@@ -1,0 +1,5 @@
+# Ignoră configurațiile VS Code
+.vscode/
+
+# Ignoră toate fișierul executabil
+exe.exe
