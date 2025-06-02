@@ -106,11 +106,11 @@ void insertTetrimino(Tetrimino tetrimino, int row, int column){
 
 void handleInput(){
     int input = readInput();
-    printf("Input: %d\n", input);
 
-    if(isTetriminoActive == 0){
+    if(!isTetriminoActive){
         tetrimino = createTetrimino();
-        insertTetrimino(tetrimino, current_row, current_column);
+        current_row = 0;
+        current_column = COLUMNS / 2 - tetrimino.columns / 2;
         isTetriminoActive = 1;
     }
 
@@ -119,34 +119,30 @@ void handleInput(){
         game_running_flag = 0;
         return;
     }
-    else if(input == 32){
+    if(input == 32){
         //space key
     }
 
     if(input == 224){
         special_char_flag = 1;
+        return;
     }
-    else if(special_char_flag == 1){
-        if(input == 77){
-            //right key
-            if(canMove(tetrimino, current_row, current_column+1)){
-                current_column++;
-            }   
+    if(special_char_flag){
+        int new_row = current_row;
+        int new_column = current_column;
+
+        switch (input) {
+            case 75: new_column--; break; // LEFT
+            case 77: new_column++; break; // RIGHT
+            case 80: new_row++; break;    // DOWN
+            case 72: /* ROTATE */ break;
         }
-        else if(input == 75){
-            //left key
-            if(canMove(tetrimino, current_row, current_column-1)){
-                current_column--;
-            }
+
+        if (canMove(tetrimino, new_row, new_column)) {
+            current_row = new_row;
+            current_column = new_column;
         }
-        else if(input ==  72){
-            //up key
-        }
-        else if(input == 80){
-            if(canMove(tetrimino, current_row+1, current_column)){
-                current_row++;
-            }
-        }
+
         special_char_flag = 0;
     }
     insertTetrimino(tetrimino, current_row, current_column);
